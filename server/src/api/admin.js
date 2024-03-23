@@ -19,6 +19,22 @@ router.get('/get-users', fetchPerson, async(req,res)=>{
     }
 })
 
+// Get single user by ID
+router.get("/get-user/:id", async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        res.status(200).json({ success: true, user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 router.get('/get-products', fetchPerson, async(req,res)=>{
     if(req.isAdmin===false){
         return res.status(403).json({success: false, message: "Unauthorized access"});
@@ -31,6 +47,22 @@ router.get('/get-products', fetchPerson, async(req,res)=>{
         res.status(500).json({success: false, message: "Internal server error", err: error.message});
     }
 })
+
+// Get single product by ID
+router.get("/get-product/:id", async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        res.status(200).json({ success: true, product });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 router.post("/add-product", fetchPerson, async(req, res)=>{
     if(req.isAdmin===false){
@@ -89,6 +121,23 @@ router.get('/get-orders', fetchPerson, async(req,res)=>{
         res.status(500).json({success: false, message: "Internal server error", err: error.message});
     }
 })
+
+// Get single order by ID
+router.get("/get-order/:id", async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const order = await Order.findById(orderId);
+        
+        if (!order) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        res.status(200).json({ success: true, order });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
 
 router.put("/update-order/:id", fetchPerson, async(req,res)=>{
     if(req.isAdmin===false){
