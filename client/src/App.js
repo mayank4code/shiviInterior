@@ -5,7 +5,7 @@ import './App.css'
 
 
 import Login from './components/Login';
-import Signup from "../src/components/Signup";
+import Register from '../src/components/Register';
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
       <Routes>
         {/* User */}
           
-          <Route path="/signup" element={<Signup/>} />
+          <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
           {/* Admin */}    
         </Routes>

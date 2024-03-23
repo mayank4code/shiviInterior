@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 
 const User = require("../mongodb/Models/User");
-const Question = require("../mongodb/Models/Product");
+const Product = require("../mongodb/Models/Product");
 const Order = require("../mongodb/Models/Order");
 
 const fetchPerson = require("../middlewares");
@@ -81,13 +81,13 @@ router.post("/login", async (req,res)=>{
 })
 
 //* mobile number is already verified through Otp on Client Side
-router.post("/update-password", fetchPerson, async (req, res)=>{
+router.put("/update-password", fetchPerson, async (req, res)=>{
     const mobile = req.body.mobile ;
     const newPassword = req.body.password ;
 
     try {
         // Hash the password
-       const newHashedPassword = await bcrypt.hash(fields.password, 10); // 10 is the salt rounds
+       const newHashedPassword = await bcrypt.hash(newPassword, 10); // 10 is the salt rounds
         const userDoc = await User.findOneAndUpdate({mobile: mobile}, {password: newHashedPassword}, {new: true});
 
         if(userDoc === null){
@@ -100,7 +100,87 @@ router.post("/update-password", fetchPerson, async (req, res)=>{
         res.status(500).json({success: false, message: err});
     }
 
+});
+
+router.get("/get-user", fetchPerson , async (req, res) => {
+
+    try {
+        const userId = req.body.id;
+        const user = await User.findById(userId);
+        
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        res.status(200).json({ success: true, user });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+router.get('/get-products', fetchPerson, async(req,res)=>{
+
+    try {
+        const allProduct = await Product.find();
+        res.status(200).json({success: true, message: "Product fetched successfully", allProduct});
+    } catch (error) {
+        res.status(500).json({success: false, message: "Internal server error", err: error.message});
+    }
 })
+
+// Get single product by ID
+router.get("/get-product/:id",fetchPerson, async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        res.status(200).json({ success: true, product });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+router.post("/place-order",fetchPerson, async (req, res) => {
+    const order_details = req.body;
+    try {
+       // Create New Order
+       const newOrder = await Order.create({ order_details }); // todo create order by refering one one fields:value
+       res.status(200).json({success: true, message: "Order Placed Successfully", newOrder});
+    } catch(err){
+        console.log(err);
+        res.status(500).json({success: false, message: "Cannot Place Order", err});
+    }
+        
+});
+
+router.put("/cancel-order/:id", fetchPerson, async (req, res) => {
+    const order_id = req.params.id;
+    const updateFields = { status: "Canceled by User" }; // Define the fields to be updated
+
+    try {
+        const newOrder = await Order.findByIdAndUpdate(order_id, updateFields, { new: true });
+        
+        if (!newOrder) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        res.status(200).json({ success: true, message: "Order Canceled successfully", newOrder });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Internal server error", err: error.message });
+    }
+});
+
+
+router.post("/post-enquiry" , fetchPerson , (req , res)=>{
+        res.status(200).json({
+            success: true , message: "Enquiry Placed Admin Get Back to you Soon" 
+        })
+
+});
 
 
 module.exports = router;

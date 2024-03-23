@@ -20,7 +20,11 @@ router.get('/get-users', fetchPerson, async(req,res)=>{
 })
 
 // Get single user by ID
-router.get("/get-user/:id", async (req, res) => {
+router.get("/get-user/:id", fetchPerson , async (req, res) => {
+    if(req.isAdmin===false){
+        return res.status(403).json({success: false, message: "Unauthorized access"});
+    }
+
     try {
         const userId = req.params.id;
         const user = await User.findById(userId);
@@ -49,7 +53,11 @@ router.get('/get-products', fetchPerson, async(req,res)=>{
 })
 
 // Get single product by ID
-router.get("/get-product/:id", async (req, res) => {
+router.get("/get-product/:id",fetchPerson, async (req, res) => {
+    if(req.isAdmin===false){
+        return res.status(403).json({success: false, message: "Unauthorized access"});
+    }
+
     try {
         const productId = req.params.id;
         const product = await Product.findById(productId);
@@ -123,7 +131,11 @@ router.get('/get-orders', fetchPerson, async(req,res)=>{
 })
 
 // Get single order by ID
-router.get("/get-order/:id", async (req, res) => {
+router.get("/get-order/:id",fetchPerson , async (req, res) => {
+    if(req.isAdmin===false){
+        return res.status(403).json({success: false, message: "Unauthorized access"});
+    }
+
     try {
         const orderId = req.params.id;
         const order = await Order.findById(orderId);
@@ -143,6 +155,10 @@ router.put("/update-order/:id", fetchPerson, async(req,res)=>{
     if(req.isAdmin===false){
         return res.status(403).json({success: false, message: "Unauthorized access"});
     }
+
+    if(req.isAdmin===false){
+        return res.status(403).json({success: false, message: "Unauthorized access"});
+    }
     const order_id = req.params.id;
 
     try {
@@ -151,6 +167,8 @@ router.put("/update-order/:id", fetchPerson, async(req,res)=>{
     } catch (error) {
         res.status(500).json({success: false, message: "Internal server error", err: error.message});
     }
-})
+});
+
+
 
 module.exports = router;
