@@ -1,51 +1,26 @@
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import "./css/navbar.css"
 
-function NavScrollExample() {
-  return (
-    <Navbar expand="lg" className="bg-body-tertiary">
-      <Container fluid>
-        <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbarScroll" />
-        <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '100px' }}
-            navbarScroll
-          >
-            <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
-            <NavDropdown title="Link" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="#" disabled>
-              Link
-            </Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-  );
+
+const Navbar = () => {
+    return (
+    <nav>
+        <div className='container'>
+            <img className="container-item" id='logo' src="https://www.shutterstock.com/image-vector/url-shortener-man-pushes-address-bar-2201694049" alt="Logo" />
+
+            <div className="container-item">item 1</div>
+            <div className="container-item">item 2 </div>
+            <div className="container-item">item 3</div>
+            <div className="container-item">item 4</div>
+            <div className="container-item">item 5</div>
+            <div className="container-item">item 6</div>
+            <div className="container-item">item 7</div>
+            <div className="container-item">item 8</div>
+
+        </div>
+    </nav>
+    );
 }
-
-export default NavScrollExample;
+ 
+export default Navbar;

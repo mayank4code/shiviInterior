@@ -1,0 +1,19 @@
+.container{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 4rem;
+    margin-bottom: 1rem;
+    margin-top: 3px;
+
+    
+    display: flex;
+    justify-content: space-around; 
+}
+
+.container-item{
+        display: flex;
+        justify-content: center; /* Horizontal alignment */
+        align-items: center; /* Vertical alignment */
+    }
