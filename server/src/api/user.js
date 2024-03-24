@@ -102,7 +102,7 @@ router.put("/update-password", fetchPerson, async (req, res)=>{
 
 });
 
-router.get("/get-user", fetchPerson , async (req, res) => {
+router.get("/my_profile", fetchPerson , async (req, res) => {
 
     try {
         const userId = req.body.id;

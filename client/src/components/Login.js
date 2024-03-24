@@ -1,47 +1,50 @@
+// Login.js
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import './css/login.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const [inputs, setInputs] = useState({ mobile: '', password: '' });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you can handle form submission, e.g., send data to backend
-    console.log('Username:', username);
-    console.log('Password:', password);
-    // Reset form fields after submission
-    setUsername('');
-    setPassword('');
-  };
+    const handleChange = (e) => {
+        setInputs({ ...inputs, [e.target.id]: e.target.value });
+    };
 
-  return (
-    <form className="sign-in-form" onSubmit={handleSubmit}>
-      <h2 className="title">Sign in</h2>
-      <div className="input-field">
-        <i className="fas fa-user"></i>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div className="input-field">
-        <i className="fas fa-lock"></i>
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <input type="submit" value="Login" className="btn solid" />
-      <p className="social-text">Or Sign in with social platforms</p>
-      <div className="social-media">
-        {/* Add social media login options if necessary */}
-      </div>
-    </form>
-  );
+    const handleSubmit = async () => {
+        const response = await fetch('http://localhost:5000/api/user/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'auth-token': `${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(inputs)
+        });
+        const data = await response.json();
+        if (data.success) {
+            toast.success('You are Logged in successfully');
+            localStorage.setItem('token', data.token);
+            navigate('/');
+        } else {
+            toast.error('Unable to login. Please try again later.');
+        }
+    };
+
+    return (
+        <div className="login-container">
+            <h1>Login</h1>
+            <div>
+                <label htmlFor="mobile">Mobile: </label>
+                <input onChange={handleChange} type="text" id="mobile" placeholder="mobile" />
+            </div>
+            <div>
+                <label htmlFor="password">Password: </label>
+                <input onChange={handleChange} type="password" id="password" placeholder="Password" />
+            </div>
+            <button onClick={handleSubmit}>Submit</button>
+        </div>
+    );
 };
 
 export default Login;
