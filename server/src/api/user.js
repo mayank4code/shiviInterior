@@ -12,9 +12,18 @@ router.get("/authUser" ,fetchPerson , (req ,res)=>{
     res.status(200).json({success: true, message: "successfully used middleware"});
 })
 
+router.post("/verify-user", fetchPerson, async (req,res)=>{
+    //Used in Navbar
+    try{
+        res.json({success: true, message: "Token verified successfully", isAdmin: req.isAdmin});
+    }catch{
+        res.status(500).json({success: false, message: err});
+    }
+
+});
 
 //Register
-// form validation ->  data store -> token generation -> send in response to client ->store in Localstorage 
+// form validation ->  data store -> token generation -> send in response to client ->store in Local storage 
 
 
 router.post("/register",  async(req,res)=>{
@@ -24,7 +33,7 @@ router.post("/register",  async(req,res)=>{
        const hashedPassword = await bcrypt.hash(fields.password, 10); // 10 is the salt rounds
 
        // Create user with hashed password
-       const newUser = await User.create({    // todo create user by refering one one fields
+       const newUser = await User.create({    // todo create user by referring one one fields
            ...fields, 
            password: hashedPassword
        });  
@@ -44,7 +53,7 @@ router.post("/register",  async(req,res)=>{
 });
 
 //LOGIN
-// form validation -> credential check -> token generation -> send token as reponse to client -> store token in Localstorage
+// form validation -> credential check -> token generation -> send token as response to client -> store token in Local storage
 
 router.post("/login", async (req,res)=>{
     try {
@@ -148,7 +157,7 @@ router.post("/place-order",fetchPerson, async (req, res) => {
     const order_details = req.body;
     try {
        // Create New Order
-       const newOrder = await Order.create({ order_details }); // todo create order by refering one one fields:value
+       const newOrder = await Order.create({ order_details }); // todo create order by referring one one fields:value
        res.status(200).json({success: true, message: "Order Placed Successfully", newOrder});
     } catch(err){
         console.log(err);
